@@ -4,9 +4,11 @@ require 'rails/generators/migration'
 
 module SeoOptimizer
   class ModelsGenerator < Rails::Generators::NamedBase
-    include Rails::Generators::Migration
     source_root File.expand_path('templates', __dir__)
+    include Rails::Generators::Migration
     desc 'Generates migration for models'
+
+    argument :desired_fields, type: :array, default: [], banner: "field field"
 
     def self.orm
       Rails::Generators.options[:rails][:orm]
@@ -23,7 +25,6 @@ module SeoOptimizer
     def create_migration_file
       return unless self.class.orm_has_migration?
 
-
       migration_template 'model_template.erb',
                          "db/migrate/add_#{model_name}_seo_slug_migration.rb",
                          migration_version: migration_version,
@@ -33,12 +34,10 @@ module SeoOptimizer
 
     end
 
-    def model
-      name.split(':').first
-    end
+    private
 
-    def fields
-      name.split(':')[1..]
+    def model
+      name
     end
 
     def model_name
@@ -50,7 +49,8 @@ module SeoOptimizer
     end
 
     def desired_fields_reference
-      fields.join(', ')
+      desired_fields.delete('seo_slug')
+      desired_fields.join(', ')
     end
 
     def migration_version
