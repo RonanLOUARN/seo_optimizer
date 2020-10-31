@@ -1,0 +1,19 @@
+class Add<%= model_name.capitalize %>SeoSlugMigration < ActiveRecord::Migration<%= migration_version %>
+  def up
+    add_column(:<%= model_table %>, :seo_slug, :string) unless column_exists?(:<%= model_table %>, :seo_slug)
+    ActiveRecord::Base.connection.execute(query)
+  end
+
+  def down
+    remove_column :<%= model_table %>, :seo_slug
+  end
+
+  private
+
+  def query
+    <<-SQL
+      UPDATE <%= model_table %>
+      SET seo_slug = concat_ws('-', id, <%= desired_fields_reference %>)
+    SQL
+  end
+end

@@ -1,6 +1,5 @@
-require "seo_optimizer/version"
+# frozen_string_literal: true
 
-module SeoOptimizer
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require 'seo_optimizer/version'
+
+class SeoOptimizer::Error < StandardError; end

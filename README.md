@@ -22,7 +22,55 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+##### Model routes with slug:
+
+To add seo_slug field to a model, you can use the generator as shown below.
+
+Syntax:
+*rails g seo_optimizer:my_model field_1 field_2 3 4 5...*
+
+    $ rails generate seo_optimizer:user first_name last_name other_field
+    
+Then
+
+    $ rails db:migrate    
+    
+You can override `to_param` method in your model to change your models links pattern
+
+````ruby
+class User < ApplicationRecord
+  ...
+  
+  def to_param
+    seo_slug
+  end
+end
+````
+
+And then `<%= link_to 'Show', User.first %>` will generate a link that follow the new seo pattern
+
+`/users/USERID-FIELD-FIELD-FIELD`
+
+
+`/users/1-field_one-field_two-other_field`
+
+
+So, in your `UsersController`:
+
+```ruby
+class UsersController < ApplicationController
+  before_action :set_user, only: :show
+  
+  def show; end
+
+  private
+
+  def set_user
+    # we find users by seo_slug field 
+    @user = User.find_by(seo_slug: params[:id])
+  end
+end
+```
 
 ## Development
 
