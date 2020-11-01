@@ -1,0 +1,39 @@
+# frozen_string_literal: true
+
+namespace :sitemap do
+  task generate: :environment do
+    SitemapGenerator::Sitemap.default_host = '<%= Rails.configuration.sitemap_config_variable[:production_url] %>'
+    SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
+    SitemapGenerator::Sitemap.create_index = false
+    SitemapGenerator::Sitemap.create do
+      routes = Rails.application.routes.routes.map do |route|
+        {
+          alias: route.name,
+          path: route.path.spec.to_s,
+          controller: route.defaults[:controller],
+          action: route.defaults[:action],
+        }
+      end
+
+      # Set a list of controllers you don't want to generate routes for.
+      # /rails/info in particular maps to something inaccessible.
+      # redirects have a nil controller. This prevents duplicate content penalties.
+      banned_controllers = ["rails/info", nil]
+      routes.reject! { |route| banned_controllers.include?(route[:controller]) }
+
+      # sitemap_generator includes root by default; prevent duplication
+      routes.reject! { |route| route[:path] == '/' }
+
+      routes.each { |route| add route[:path][0..-11] } # Strips off '(.:format)
+
+      # Notice the below if you're hosting Jekyll/Octopress in a subdirectory
+      # or otherwise want to index content outside of Rails' routes.
+      # add_to_index '/sitemaps/show.xml'
+
+      # example for user resources
+      # User.select(:seo_slug, :updated_at).each do |slug|
+      #   add user_path(slug), lastmod: slug.updated_at
+      # end
+    end
+  end
+end
