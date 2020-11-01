@@ -3,7 +3,6 @@
 namespace :sitemap do
   task generate: :environment do
     SitemapGenerator::Sitemap.default_host = '<%= Rails.configuration.sitemap_config_variable[:production_url] %>'
-    SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
     SitemapGenerator::Sitemap.create_index = false
     SitemapGenerator::Sitemap.create do
       routes = Rails.application.routes.routes.map do |route|
@@ -35,5 +34,6 @@ namespace :sitemap do
       #   add user_path(slug), lastmod: slug.updated_at
       # end
     end
+    SitemapGenerator::Sitemap.ping_search_engines('<%= Rails.configuration.sitemap_config_variable[:production_url] %>/sitemap.xml')
   end
 end
