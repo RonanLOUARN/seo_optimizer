@@ -2,10 +2,12 @@ PATH
   remote: .
   specs:
     seo_optimizer (0.1.0)
+      sitemap_generator
 
 GEM
   remote: https://rubygems.org/
   specs:
+    builder (3.2.4)
     diff-lcs (1.4.4)
     rake (12.3.3)
     rspec (3.10.0)
@@ -21,6 +23,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.0)
+    sitemap_generator (6.1.2)
+      builder (~> 3.0)
 
 PLATFORMS
   ruby
@@ -29,6 +33,7 @@ DEPENDENCIES
   rake (~> 12.0)
   rspec (~> 3.0)
   seo_optimizer!
+  sitemap_generator
 
 BUNDLED WITH
    2.1.4
