@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+class SitemapsController < ApplicationController
+  def show
+    file = Zlib::GzipReader.new(open('public/sitemaps/sitemap.xml.gz'))
+    render xml: file.read
+  end
+end

@@ -1,8 +1,6 @@
-# SeoOptimizer
+# Seo Optimizer
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/seo_optimizer`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Seo Optimizer provides a set of helpers which guide you in SEO improvements.
 
 ## Installation
 
@@ -22,20 +20,57 @@ Or install it yourself as:
 
 ## Usage
 
-##### Model routes with slug:
+#### Sitemap.yml, robots.txt
+
+There is a generator and a task to create needed files that will be read by search engines robots.
+
+**1** - Setup (it add a new config variable in `application.rb`)
+
+```bash
+$ rails g seo_optimizer:setups
+```    
+**2** - Replace the default value of product_url in `application.rb`  
+
+```ruby
+config.sitemap_config_variable = {}
+config.sitemap_config_variable[:production_url] = 'https://YOUR-PRODUCTION-URL.com'
+```
+
+**3** - Generate robots files (this will create sitemap.yml, robots.txt routes/actions/views)
+
+```bash
+$ rails g seo_optimizer:robots_files
+```
+
+**4** - Edit sitemap generate task `lib/tasks/sitemap/generate.rake` to add your customs routes like resources CRUD 
+    routes etc, check the section below for more informations or check sitemap_generator 
+    doc (https://github.com/kjvarga/sitemap_generator).
+
+**5** - Generate the sitemap.xml
+```bash
+$ rails sitemap:generate
+```
+**Existing routes will be generated in sitemap by default.**
+
+Then you can check these urls: 
+
+robots.txt file: http://localhost:3000/robots.txt  
+sitemap.xml file: http://localhost:3000/sitemap.xml  
+______________
+#### Model routes with slug:
 
 To add seo_slug field to a model, you can use the generator as shown below.
 
-Syntax:
-*rails g seo_optimizer:my_model field_1 field_2 3 4 5...*
+**1** - Syntax:
+`rails g seo_optimizer:my_model field_1 field_2 3 4 5...`
 
     $ rails generate seo_optimizer:user first_name last_name other_field
     
-Then
+**2** - Migrate
 
     $ rails db:migrate    
     
-You can override `to_param` method in your model to change your models links pattern
+**3** - Override `to_param` method in your model to change your models links pattern
 
 ````ruby
 class User < ApplicationRecord
@@ -55,7 +90,7 @@ And then `<%= link_to 'Show', User.first %>` will generate a link that follow th
 `/users/1-field_one-field_two-other_field`
 
 
-So, in your `UsersController`:
+**4** - So, in your `UsersController`:
 
 ```ruby
 class UsersController < ApplicationController
@@ -72,6 +107,19 @@ class UsersController < ApplicationController
 end
 ```
 
+**5** - You can update the sitemap task to add every routes with slugs in it.
+
+- In `SitemapGenerator::Sitemap.create` block
+
+```ruby
+User.select(:seo_slug, :updated_at).each do |slug|
+  add user_path(slug), lastmod: slug.updated_at, priority: 0.8
+end
+```
+
+- Then don't forget to `$ rails sitemap:generate`
+
+ 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
