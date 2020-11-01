@@ -56,7 +56,9 @@ Then you can check these urls:
 
 robots.txt file: http://localhost:3000/robots.txt  
 sitemap.xml file: http://localhost:3000/sitemap.xml  
-______________
+
+_________________
+
 #### Model routes with slug:
 
 To add seo_slug field to a model, you can use the generator as shown below.
@@ -112,13 +114,37 @@ end
 - In `SitemapGenerator::Sitemap.create` block
 
 ```ruby
-User.select(:seo_slug, :updated_at).each do |slug|
-  add user_path(slug), lastmod: slug.updated_at, priority: 0.8
+SitemapGenerator::Sitemap.create do
+  ...
+  User.select(:seo_slug, :updated_at).each do |slug|
+    add user_path(slug), lastmod: slug.updated_at, priority: 0.8
+  end
 end
 ```
 
-- Then don't forget to `$ rails sitemap:generate`
+- Then don't forget to `$ rails sitemap:generate`.
 
+______________
+
+#### Error pages (404, 500):
+ 
+**1** - Generate error pages view, actions and routes.
+```bash
+$ rails g seo_optimizer:errors_pages
+```
+
+**2** - You can customize pages in `app/views/errors/`
+
+**3** - Edit `config/environment/develoment.rb` if you want to test it in dev environment.
+
+⛔️ DO NOT COMMIT ⛔️
+
+```ruby
+config.consider_all_requests_local = true
+# to 
+config.consider_all_requests_local = false 
+```
+_________________
  
 ## Development
 
