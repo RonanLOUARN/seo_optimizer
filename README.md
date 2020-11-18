@@ -20,6 +20,28 @@ Or install it yourself as:
 
 ## Usage
 
+
+#### Global generator
+
+This command will add setup files of errors pages, sitemap.xml, robots.txt and meta tags.
+
+```bash
+$ rails g seo_optimizer:fast_config
+```    
+______________
+
+#### Meta tags
+
+There is a generator to setup meta tags
+
+```bash
+$ rails g seo_optimizer:meta_tags
+```    
+
+This will generate meta tags config that you can customize in `config/meta.yml` and `app/views/layouts/application.html.erb`
+
+______________
+
 #### Sitemap.yml, robots.txt
 
 There is a generator and a task to create needed files that will be read by search engines robots.
@@ -57,6 +79,26 @@ Then you can check these urls:
 robots.txt file: http://localhost:3000/robots.txt  
 sitemap.xml file: http://localhost:3000/sitemap.xml  
 
+______________
+
+#### Error pages (404, 500):
+ 
+**1** - Generate error pages view, actions and routes.
+```bash
+$ rails g seo_optimizer:errors_pages
+```
+
+**2** - You can customize pages in `app/views/errors/`
+
+**3** - Edit `config/environment/develoment.rb` if you want to test it in dev environment.
+
+⛔️ DO NOT COMMIT ⛔️
+
+```ruby
+config.consider_all_requests_local = true
+# to 
+config.consider_all_requests_local = false 
+```
 _________________
 
 #### Model routes with slug:
@@ -124,26 +166,6 @@ end
 
 - Then don't forget to `$ rails sitemap:generate`.
 
-______________
-
-#### Error pages (404, 500):
- 
-**1** - Generate error pages view, actions and routes.
-```bash
-$ rails g seo_optimizer:errors_pages
-```
-
-**2** - You can customize pages in `app/views/errors/`
-
-**3** - Edit `config/environment/develoment.rb` if you want to test it in dev environment.
-
-⛔️ DO NOT COMMIT ⛔️
-
-```ruby
-config.consider_all_requests_local = true
-# to 
-config.consider_all_requests_local = false 
-```
 _________________
  
 ## Development
