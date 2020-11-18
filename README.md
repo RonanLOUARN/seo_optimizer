@@ -21,6 +21,15 @@ Or install it yourself as:
 ## Usage
 
 
+#### Global generator
+
+This command will add setup files of errors pages, sitemap.xml, robots.txt and meta tags.
+
+```bash
+$ rails g seo_optimizer:fast_config
+```    
+______________
+
 #### Meta tags
 
 There is a generator to setup meta tags
