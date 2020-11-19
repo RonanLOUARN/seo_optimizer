@@ -34,6 +34,9 @@ namespace :sitemap do
       #   add user_path(slug), lastmod: slug.updated_at
       # end
     end
+  end
+
+  task ping_search_engines: :environment do
     SitemapGenerator::Sitemap.ping_search_engines('<%= Rails.configuration.sitemap_config_variable[:production_url] %>/sitemap.xml')
   end
 end

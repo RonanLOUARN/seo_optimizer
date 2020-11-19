@@ -77,7 +77,13 @@ $ rails sitemap:generate
 Then you can check these urls: 
 
 robots.txt file: http://localhost:3000/robots.txt  
-sitemap.xml file: http://localhost:3000/sitemap.xml  
+sitemap.xml file: http://localhost:3000/sitemap.xml
+
+**6** - Ping search engines with your production url
+
+```bash
+$ rails sitemap:ping_search_engines
+```
 
 ______________
 
